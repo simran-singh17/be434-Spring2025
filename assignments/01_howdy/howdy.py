@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Author : Simran Singh <singh17@arizona.edu>
-Date   : 2025-01-23
+Date   : 2025-01-29
 Purpose: Print greeting
 """
 
@@ -25,7 +25,7 @@ def get_args():
                         help='A named string argument',
                         metavar='str',
                         type=str,
-                        default='')
+                        default='Howdy Stanger')
 
     parser.add_argument('-i',
                         '--int',
