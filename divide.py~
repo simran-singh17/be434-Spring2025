@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
-Author : Simran Singh <singh17@arizona.edu>
-Date   : 2025-01-29
-Purpose: Print greeting
+Author : Add your Name <Add your email>
+Date   : 2025-02-03
+Purpose: Add Your Purpose
 """
 
 import argparse
@@ -13,7 +13,7 @@ def get_args():
     """Get command-line arguments"""
 
     parser = argparse.ArgumentParser(
-        description='Print greeting',
+        description='Add Your Purpose',
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 
     parser.add_argument('positional',
@@ -25,7 +25,7 @@ def get_args():
                         help='A named string argument',
                         metavar='str',
                         type=str,
-                        default='Howdy Stanger')
+                        default='')
 
     parser.add_argument('-i',
                         '--int',
@@ -45,10 +45,6 @@ def get_args():
                         '--on',
                         help='A boolean flag',
                         action='store_true')
-
-parser.add_argument('-g', '--greeting', help='A greeting', default='Howdy')
-parser.add_argument('-n', '--name', help='A name to greeting', default='Stranger')
-parser.add_argument('-e', '--excited', help='A flag to terminate the greeting with an exclamation point', action='store_true')
 
     return parser.parse_args()
 

@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
 Author : Simran Singh <singh17@arizona.edu>
-Date   : 2025-01-29
-Purpose: Print greeting
+Date   : 2025-02-03
+Purpose: Divide two numbers
 """
 
 import argparse
@@ -13,23 +13,21 @@ def get_args():
     """Get command-line arguments"""
 
     parser = argparse.ArgumentParser(
-        description='Print greeting',
+        description='divide two numbers',
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 
-    parser.add_argument('positional',
-                        metavar='str',
-                        help='A positional argument')
+   # parser.add_argument('positional',
+    #                    metavar='str',
+     #                   help='A positional argument')
 
-    parser.add_argument('-a',
-                        '--arg',
-                        help='A named string argument',
-                        metavar='str',
-                        type=str,
-                        default='Howdy Stanger')
+   # parser.add_argument('-a',
+    #                    '--arg',
+     #                   help='A named string argument',
+      #                  metavar='str', type=str, default='')
 
     parser.add_argument('-i',
                         '--int',
-                        help='A named integer argument',
+                        help='numbers to divide',
                         metavar='int',
                         type=int,
                         default=0)
@@ -45,10 +43,6 @@ def get_args():
                         '--on',
                         help='A boolean flag',
                         action='store_true')
-
-parser.add_argument('-g', '--greeting', help='A greeting', default='Howdy')
-parser.add_argument('-n', '--name', help='A name to greeting', default='Stranger')
-parser.add_argument('-e', '--excited', help='A flag to terminate the greeting with an exclamation point', action='store_true')
 
     return parser.parse_args()
 
