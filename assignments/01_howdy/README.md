@@ -48,7 +48,7 @@ Open the new `howdy.py` program and modify it to accept three optional arguments
 * `-g|--greeting`: A greeting, defaults to "Howdy"
 * `-n|--name`: A name to greeting, defaults to "Stranger"
 * `-e|--excited`: A flag to terminate the greeting with an exclamation point
-
+* 
 The program should respond to `-h|--help` to print the following usage:
 
 ```

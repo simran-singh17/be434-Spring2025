@@ -16,14 +16,14 @@ def get_args():
         description='divide two numbers',
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 
-   # parser.add_argument('positional',
-    #                    metavar='str',
-     #                   help='A positional argument')
+    parser.add_argument('positional',
+                        metavar='str',
+                        help='A positional argument')
 
-   # parser.add_argument('-a',
-    #                    '--arg',
-     #                   help='A named string argument',
-      #                  metavar='str', type=str, default='')
+    parser.add_argument('-a',
+                        '--arg',
+                        help='A named string argument',
+                        metavar='str', type=str, default='')
 
     parser.add_argument('-i',
                         '--int',
@@ -44,7 +44,16 @@ def get_args():
                         help='A boolean flag',
                         action='store_true')
 
-    return parser.parse_args()
+    parser.add_argument("numerator", type=int, help="The numerator (dividend)")
+    parser.add_argument("denominator", type=int, help="The denominator (divisor)")
+    args = parser.parse_args()
+    if args.denominator != 0:
+                        result = args.numerator / args.denominator
+                        print(f"{result}")
+    else: print("Error: Division by zero is not allowed.")
+
+
+    return parser.parse_args() #Return the parsed arguments from within the function
 
 
 # --------------------------------------------------
