@@ -6,52 +6,23 @@ Purpose: Divide two numbers
 """
 
 import argparse
-
+import sys
 
 # --------------------------------------------------
 def get_args():
     """Get command-line arguments"""
 
     parser = argparse.ArgumentParser(
-        description='divide two numbers',
+        description='Divide two numbers',
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 
-    parser.add_argument('positional',
-                        metavar='str',
-                        help='A positional argument')
 
-    parser.add_argument('-a',
-                        '--arg',
-                        help='A named string argument',
-                        metavar='str', type=str, default='')
-
-    parser.add_argument('-i',
-                        '--int',
-                        help='numbers to divide',
-                        metavar='int',
-                        type=int,
-                        default=0)
-
-    parser.add_argument('-f',
-                        '--file',
-                        help='A readable file',
-                        metavar='FILE',
-                        type=argparse.FileType('rt'),
-                        default=None)
-
-    parser.add_argument('-o',
-                        '--on',
-                        help='A boolean flag',
-                        action='store_true')
-
-    parser.add_argument("numerator", type=int, help="The numerator (dividend)")
-    parser.add_argument("denominator", type=int, help="The denominator (divisor)")
-    args = parser.parse_args()
-    if args.denominator != 0:
-                        result = args.numerator / args.denominator
-                        print(f"{result}")
-    else: print("Error: Division by zero is not allowed.")
-
+    parser.add_argument("INT1", 
+                        type=int, metavar= 'int',
+                        help="The first integer")
+    parser.add_argument("INT2", 
+                        type=int, metavar='int',
+                        help="The second integer")
 
     return parser.parse_args() #Return the parsed arguments from within the function
 
@@ -61,17 +32,13 @@ def main():
     """Make a jazz noise here"""
 
     args = get_args()
-    str_arg = args.arg
-    int_arg = args.int
-    file_arg = args.file
-    flag_arg = args.on
-    pos_arg = args.positional
+    int1 = args.INT1
+    int2 = args.INT2
 
-    print(f'str_arg = "{str_arg}"')
-    print(f'int_arg = "{int_arg}"')
-    print('file_arg = "{}"'.format(file_arg.name if file_arg else ''))
-    print(f'flag_arg = "{flag_arg}"')
-    print(f'positional = "{pos_arg}"')
+    if int2 == 0:
+        print("usage: Cannot divide by zero, dum-dum!")
+    else:
+                        print(f'{int1} / {int2} = {int1 / int2}')
 
 
 # --------------------------------------------------
