@@ -28,11 +28,13 @@ def main():
     """Make a jazz noise here"""
 
     args = get_args()
-    jumper = {'A': 0, 'C': 0, 'G': 0, 'T': 0}
-    for char in args.positional:
-        jumper[char] += 1
-        
-    print(args.text.translate(str.maketrans(jumper)))
+    counts = {'A': 0, 'C': 0, 'G': 0, 'T': 0}
+    
+    for base in args.positional:
+        if base in counts:
+            counts[base] += 1
+            
+    print(f'{counts["A"]} {counts["C"]} {counts["G"]} {counts["T"]}')
 
 
 # --------------------------------------------------
