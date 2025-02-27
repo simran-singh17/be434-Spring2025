@@ -29,17 +29,21 @@ def main():
     """Make a jazz noise here"""
 
     args = get_args()
-    counts = {'A': 0, 'C': 0, 'G': 0, 'T': 0}
-
-    dna = args.positional
-    dna = dna.upper()
-    dna = dna.replace('T', 'U')
-    dna = dna[::-1]
-    for base in dna:
-        if base in counts:
-            counts[base] += 1
-
-    print(f'{counts["A"]} {counts["C"]} {counts["G"]} {counts["T"]}')
+    
+    # Define the complement mapping
+    complement = {'A': 'T', 'C': 'G', 'G': 'C', 'T': 'A'}
+    
+    # Get the input DNA and ensure it's uppercase
+    dna = args.positional.upper()
+    
+    # Reverse the string
+    dna_reversed = dna[::-1]
+    
+    # Complement each base
+    dna_reverse_complement = ''.join([complement.get(base, base) for base in dna_reversed])
+    
+    # Print the result
+    print(dna_reverse_complement)
 
 
 
