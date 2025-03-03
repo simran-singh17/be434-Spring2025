@@ -17,32 +17,30 @@ def get_args():
         description='Print the reverse complement of DNA',
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 
+
     parser.add_argument('positional', 
                         metavar='DNA',
                         help='Input DNA sequence')
-                    
+  
+    args = parser.parse_args()                                         
+  
+    if os.path.isfile(args.positional):    
+        args.positional = open(args.positional).read().rstrip()
+                   
+
+    return args
     
-    return parser.parse_args()
+    
 
 # --------------------------------------------------
 def main():
     """Make a jazz noise here"""
 
     args = get_args()
-    
-    # Define the complement mapping
-    complement = {'A': 'T', 'C': 'G', 'G': 'C', 'T': 'A'}
-    
-    # Get the input DNA and ensure it's uppercase
-    dna = args.positional.upper()
-    
-    # Reverse the string
+    complement = {'A': 'T', 'C': 'G', 'G': 'C', 'T': 'A', 'a': 't', 'c': 'g', 'g': 'c', 't': 'a' }
+    dna = args.positional
     dna_reversed = dna[::-1]
-    
-    # Complement each base
     dna_reverse_complement = ''.join([complement.get(base, base) for base in dna_reversed])
-    
-    # Print the result
     print(dna_reverse_complement)
 
 
