@@ -8,6 +8,7 @@ Purpose: Create synthetic sequences
 import argparse
 import sys
 import random
+from Bio import SeqIO
 
 # --------------------------------------------------
 def get_args():
@@ -88,6 +89,13 @@ def get_args():
 
 # --------------------------------------------------
 
+def main():
+    args = get_args()
+    random.seed(args.seed)
+    pool = create_pool(args.pctgc, args.maxlen, args.seqtype)
+    dna_letters = ['A', 'C', 'G', 'T']
+    rna_letters = ['A', 'C', 'G', 'U']
+
 def create_pool(pctgc, max_len, seq_type):
     pool = []
     for i in range(args.numseq):
@@ -100,16 +108,7 @@ def create_pool(pctgc, max_len, seq_type):
             print('Invalid sequence type')
         pool.append(seq)
     return pool
-
-
-def main():
-    args = get_args()
-    random.seed(args.seed)
-    pool = create_pool(args.pctgc, args.maxlen, args.seqtype)
-    dna_letters = ['A', 'C', 'G', 'T']
-    rna_letters = ['A', 'C', 'G', 'U']
-
-
+    
 t_or_u = 'T' if seq_type == 'dna' else 'U'
 num_gc = int((pctgc / 2) * max_len)        
 num_at = int(((1 - pctgc) / 2) * max_len)  

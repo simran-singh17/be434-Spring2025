@@ -7,6 +7,7 @@ Purpose: Compute GC content
 
 import argparse
 import sys
+from Bio import SeqIO
 
 
 # --------------------------------------------------
@@ -19,9 +20,9 @@ def get_args():
 
     parser.add_argument('file',
                     metavar='FILE',
-                    nargs='*',
-                    default=[sys.stdin],                             
-                    type=argparse.FileType('rt'),                    
+                    nargs='?',
+                    default=[sys.stdin],
+                    type=argparse.FileType('rt'),
                     help='Input sequence file')
 
     return parser.parse_args()   
@@ -33,18 +34,15 @@ def main():
     """Make a jazz noise here"""
 
     args = get_args()
-    out_fh = open(args.outfile, 'wt') if args.outfile else sys.stdout   
-    out_fh.write(args.text.upper() + '\n')                              
-    out_fh.close() 
-    
-    args.file = [open(fh) for fh in args.file]
-    num_files, num_lines, num_chars = 0, 0, 0
-    for fh in args.file:
-        num_files += 1
-        for line in fh:
-            num_lines += 1
-            num_chars += len(line)
-            print(f'{fh.name}: {line.upper().count("G") + line.upper().count("C")}', file=out_fh)
+
+    for sequence in SeqIO.parse(args.file, 'fasta'):
+        gc = 0 
+        for base in sequence.seq:
+            if base == 'G' or base == 'C':
+                gc += 1
+
+        print(f'{sequence.id} {gc / len(sequence.seq) * 100:.6f}')
+            
    
 
 # --------------------------------------------------
