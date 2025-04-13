@@ -8,7 +8,10 @@ Purpose: Create synthetic sequences
 import argparse
 import sys
 import random
+import sys
 from Bio import SeqIO
+from Bio.Seq import Seq
+from Bio.SeqUtils import gc_fraction
 
 # --------------------------------------------------
 def get_args():
@@ -90,37 +93,59 @@ def get_args():
 # --------------------------------------------------
 
 def main():
-    args = get_args()
-    random.seed(args.seed)
-    pool = create_pool(args.pctgc, args.maxlen, args.seqtype)
-    dna_letters = ['A', 'C', 'G', 'T']
-    rna_letters = ['A', 'C', 'G', 'U']
+             def generate_sequence(seq_type, length, gc_content):
+                 """Generate random sequence with a specified GC content."""
+                 bases = "ACGT" if seq_type == "dna" else "ACGU"
+
+                 while True:
+                     seq = "".join(random.choices(bases, k=length))
+                     gc = gc_fraction(seq) / 100
+                     if abs(gc - gc_content) <= 0.05:
+                         break
+                 return seq
 
 def create_pool(pctgc, max_len, seq_type):
-    pool = []
-    for i in range(args.numseq):
-        seq = ''
-        if seq_type == 'dna':
-            seq = ''.join(random.choices(list(dna_letters), k=random.randint(args.minlen, args.maxlen)))
-        elif seq_type == 'rna':
-            seq = ''.join(random.choices(list(rna_letters), k=random.randint(args.minlen, args.maxlen)))
-        else:
-            print('Invalid sequence type')
-        pool.append(seq)
-    return pool
-    
-t_or_u = 'T' if seq_type == 'dna' else 'U'
-num_gc = int((pctgc / 2) * max_len)        
-num_at = int(((1 - pctgc) / 2) * max_len)  
-pool = 'A' * num_at + 'C' * num_gc + 'G' * num_gc + t_or_u * num_at 
+    """Create the pool of bases"""
 
-for _ in range(max_len - len(pool)):       
-                    pool += random.choice(pool)
+    t_or_u = "T" if seq_type == "dna" else "U"
+    num_gc = int((pctgc / 2) * max_len)
+    num_at = int(((1 - pctgc) / 2) * max_len)
+    pool = "A" * num_at + "C" * num_gc + "G" * num_gc + t_or_u * num_at
 
-                    return ''.join(sorted(pool))            
+    for _ in range(max_len - len(pool)):
+        pool += random.choice(pool)
 
+    return "".join(sorted(pool))
 
+def test_create_pool():
+    """Test create_pool"""
 
+    state = random.getstate()
+    random.seed(1)
+    assert create_pool(0.5, 10, "dna") == "AAACCCGGTT"
+    assert create_pool(0.6, 11, "rna") == "AACCCCGGGUU"
+    assert create_pool(0.7, 12, "dna") == "ACCCCCGGGGGT"
+    assert create_pool(0.7, 20, "rna") == "AAACCCCCCCGGGGGGGUUU"
+    assert create_pool(0.4, 15, "dna") == "AAAACCCGGGTTTTT"
+    random.setstate(state)
+
+def main():
+    """Make a jazz noise here"""
+
+    args = get_args()
+    random.seed(args.seed)
+
+    pool = create_pool(args.pctgc, args.maxlen, args.seqtype)
+
+    for i in range(args.numseqs):
+        length = random.randint(args.minlen, args.maxlen)
+        seq = "".join(random.sample(pool, length))
+        j = i + 1
+        args.outfile.write(f">{j}\n{seq}\n")
+
+    print(
+        f'Done, wrote {args.numseqs} {args.seqtype.upper()} sequences to "{args.outfile.name}".'
+    )
 
 # --------------------------------------------------
 if __name__ == '__main__':
