@@ -13,16 +13,18 @@ import sys
 # --------------------------------------------------
 def get_args():
     """Get command-line arguments"""
-
+    
     parser = argparse.ArgumentParser(
         description='Find conserved bases',
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 
-    parser.add_argument("File", metavar="FILE", help="Input file")
+    parser.add_argument('FILE',
+                    metavar='FILE',
+                    type=argparse.FileType('rt'),
+                    help='Input file')
 
-                    
+    return parser.parse_args()          
 
-    return parser.parse_args()
 
 
 # --------------------------------------------------
@@ -30,24 +32,27 @@ def main():
     """Make a jazz noise here"""
 
     args = get_args()
-    if not os.path.isfile(args.File):
-                            sys.exit(f"No such file or directory: '{args.File}'")
+    fh = args.FILE
 
-                        with open(args.File) as f:
-                            lines = [line.strip() for line in f if line.strip()]
+    lines = [line.strip() for line in fh]
 
-                        for line in lines:
-                            print(line)
+    for line in lines:
+        print(line)
 
-                        conserved = []
-    for chars in zip(*lines):
-                            if all(char == chars[0] for char in chars):
-                                conserved.append("|")
-                            else:
-                                conserved.append("X")
+    max_length = max(len(line) for line in lines)
 
-                        print("".join(conserved))
+    output = []
 
+    for position in range(max_length):
+        chars_at_position = [line[position] for line in lines]
+
+        if all(char == chars_at_position[0] for char in chars_at_position):
+            output.append('|')
+        else:
+            output.append('X')
+
+    output_string = ''.join(output)
+    print(output_string)
 
 # --------------------------------------------------
 if __name__ == '__main__':
