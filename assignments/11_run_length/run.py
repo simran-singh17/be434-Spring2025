@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 """
 Author : Simran Singh <singh17@arizona.edu>
-Date   : 2025-04-19
+Date   : 2025-04-16
 Purpose: compress a string DNA
 """
 
 import argparse
-
+import os
 
 # --------------------------------------------------
 def get_args():
@@ -17,32 +17,59 @@ def get_args():
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 
 
-    parser.add_argument('-str',
-                        help='DNA text or file',
-                        metavar='str',
-                        type=str,
-                        default='')
+    parser.add_argument('sequence',
+                    metavar='str',
+                    help='DNA text or file')
 
+     args = parser.parse_args()
 
-    return parser.parse_args()
+     if os.path.isfile(args.sequence):
+                            args.sequence = open(args.sequence).read().rstrip()
 
+     return args
 
 # --------------------------------------------------
 def main():
     """Make a jazz noise here"""
 
     args = get_args()
-    str_arg = args.arg
-    int_arg = args.int
-    file_arg = args.file
-    flag_arg = args.on
-    pos_arg = args.positional
+    for seq in args.sequence.splitlines():
+        print(rle(seq))
 
-    print(f'str_arg = "{str_arg}"')
-    print(f'int_arg = "{int_arg}"')
-    print('file_arg = "{}"'.format(file_arg.name if file_arg else ''))
-    print(f'flag_arg = "{flag_arg}"')
-    print(f'positional = "{pos_arg}"')
+# --------------------------------------------------
+def rle(seq):
+    """ Create RLE """
+
+    rle_string = []
+    count = 1
+
+    for i in range(1, len(seq)):
+        if seq[i] == seq[i - 1]:
+            count += 1
+        else:
+            if count > 1:
+                rle_string.append(seq[i - 1] + str(count))
+            else:
+                rle_string.append(seq[i - 1])
+            count = 1
+
+    if count > 1:
+        rle_string.append(seq[-1] + str(count))
+    else:
+        rle_string.append(seq[-1])
+
+    return ''.join(rle_string)
+
+# --------------------------------------------------
+def test_rle():
+    """ Test rle """
+
+    assert rle('A') == 'A'
+    assert rle('ACGT') == 'ACGT'
+    assert rle('AA') == 'A2'
+    assert rle('AAAAA') == 'A5'
+    assert rle('ACCGGGTTTT') == 'AC2G3T4'
+
 
 
 # --------------------------------------------------
