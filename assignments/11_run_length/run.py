@@ -8,35 +8,42 @@ Purpose: compress a string DNA
 import argparse
 import os
 
+
 # --------------------------------------------------
 def get_args():
     """Get command-line arguments"""
 
     parser = argparse.ArgumentParser(
         description='Run-length encoding/data compression',
-        formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter,)
 
+    parser.add_argument("positional", metavar="str", help="DNA text or file")
 
-    parser.add_argument('sequence',
-                    metavar='str',
-                    help='DNA text or file')
+    return parser.parse_args()
 
-     args = parser.parse_args()
-
-     if os.path.isfile(args.sequence):
-                            args.sequence = open(args.sequence).read().rstrip()
-
-     return args
 
 # --------------------------------------------------
-def main():
-    """Make a jazz noise here"""
+def rle(seq):
+    """Return run-length encoded sequence"""
 
-    args = get_args()
-    for seq in args.sequence.splitlines():
-        print(rle(seq))
+    if not seq:
+        return ""
 
-# --------------------------------------------------
+    result = []
+    prev = seq[0]
+    count = 1
+
+    for char in seq[1:]:
+        if char == prev:
+            count += 1
+        else:
+            result.append(prev + (str(count) if count > 1 else ""))
+            prev = char
+            count = 1
+
+    result.append(prev + (str(count) if count > 1 else ""))
+    return "".join(result)
+#----------------------------------------------
 def rle(seq):
     """ Create RLE """
 
@@ -59,6 +66,27 @@ def rle(seq):
         rle_string.append(seq[-1])
 
     return ''.join(rle_string)
+# --------------------------------------------------
+def main():
+    """Make a jazz noise here"""
+
+    args = get_args()
+    args = args.positional
+
+    if os.path.isfile(args):
+        with open(args) as file:
+            for line in file:
+                print(rle(line.strip()))
+    else:
+        print(rle(args))
+
+# --------------------------------------------------
+def main():
+    """Make a jazz noise here"""
+
+    args = get_args()
+    for seq in args.sequence.splitlines():
+        print(rle(seq))
 
 # --------------------------------------------------
 def test_rle():
@@ -69,9 +97,6 @@ def test_rle():
     assert rle('AA') == 'A2'
     assert rle('AAAAA') == 'A5'
     assert rle('ACCGGGTTTT') == 'AC2G3T4'
-
-
-
 # --------------------------------------------------
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
