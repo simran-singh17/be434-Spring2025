@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 modules = ["python-3.12", "bash"]
+=======
+modules = ["bash", "python-3.12"]
+>>>>>>> 5389004 (Fixes By Bonnie)
 
 [nix]
 channel = "stable-24_05"
