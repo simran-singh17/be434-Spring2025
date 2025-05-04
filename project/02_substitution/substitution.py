@@ -2,7 +2,7 @@
 """
 Author : Simran Singh <singh17@arizona.edu>
 Date   : 2025-05-04
-Purpose: substitution cipher project
+Purpose: Substitution Cipher project
 """
 
 import argparse
@@ -20,15 +20,24 @@ def get_args():
     )
 
     parser.add_argument(
-        "file", metavar="FILE", type=argparse.FileType("rt"), help="Input file"
+        "file", metavar="FILE", 
+         type=argparse.FileType("rt"), 
+         help="Input file"
     )
 
     parser.add_argument(
-        "-s", "--seed", metavar="SEED", type=int, default=3, help="A random seed"
+        "-s", "--seed", 
+        metavar="SEED", 
+        type=int, 
+        default=3, 
+        help="A random seed"
     )
 
     parser.add_argument(
-        "-d", "--decode", action="store_true", help="Decode instead of encode"
+        "-d", 
+        "--decode", 
+        action="store_true", 
+        help="Decode instead of encode"
     )
 
     parser.add_argument(

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Author : Add your Name <Add your email>
+Author : Simran Singh <singh17@arizona.edu>
 Date   : 2025-05-03
 Purpose: Caesar‐shift encode/decode a file
 """
@@ -19,7 +19,10 @@ def get_args():
     )
 
     parser.add_argument(
-        "file", metavar="FILE", type=argparse.FileType("rt"), help="Input file"
+        "file", 
+        metavar="FILE", 
+        type=argparse.FileType("rt"), 
+        help="Input file"
     )
 
     parser.add_argument(
@@ -32,7 +35,9 @@ def get_args():
     )
 
     parser.add_argument(
-        "-d", "--decode", action="store_true", help="Decode instead of encode"
+        "-d", "--decode", 
+        action="store_true", 
+        help="Decode instead of encode"
     )
 
     parser.add_argument(
@@ -73,7 +78,6 @@ def main():
 
     if args.outfile:
         args.outfile.close()
-
 
 # --------------------------------------------------
 if __name__ == "__main__":
