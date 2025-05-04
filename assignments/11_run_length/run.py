@@ -11,92 +11,55 @@ import os
 
 # --------------------------------------------------
 def get_args():
-    """Get command-line arguments"""
+        """Get command-line arguments"""
 
-    parser = argparse.ArgumentParser(
-        description='Run-length encoding/data compression',
-        formatter_class=argparse.ArgumentDefaultsHelpFormatter,)
+        parser = argparse.ArgumentParser(
+            description="Add Your Purpose",
+            formatter_class=argparse.ArgumentDefaultsHelpFormatter,)
 
-    parser.add_argument("positional", metavar="str", help="DNA text or file")
+        parser.add_argument("positional", metavar="str", help="DNA text or file")
 
-    return parser.parse_args()
+        return parser.parse_args()
 
 
 # --------------------------------------------------
 def rle(seq):
-    """Return run-length encoded sequence"""
+        """Return run-length encoded sequence"""
 
-    if not seq:
-        return ""
+        if not seq:
+            return ""
 
-    result = []
-    prev = seq[0]
-    count = 1
+        result = []
+        prev = seq[0]
+        count = 1
 
-    for char in seq[1:]:
-        if char == prev:
-            count += 1
-        else:
-            result.append(prev + (str(count) if count > 1 else ""))
-            prev = char
-            count = 1
-
-    result.append(prev + (str(count) if count > 1 else ""))
-    return "".join(result)
-#----------------------------------------------
-def rle(seq):
-    """ Create RLE """
-
-    rle_string = []
-    count = 1
-
-    for i in range(1, len(seq)):
-        if seq[i] == seq[i - 1]:
-            count += 1
-        else:
-            if count > 1:
-                rle_string.append(seq[i - 1] + str(count))
+        for char in seq[1:]:
+            if char == prev:
+                count += 1
             else:
-                rle_string.append(seq[i - 1])
-            count = 1
+                result.append(prev + (str(count) if count > 1 else ""))
+                prev = char
+                count = 1
 
-    if count > 1:
-        rle_string.append(seq[-1] + str(count))
-    else:
-        rle_string.append(seq[-1])
+        result.append(prev + (str(count) if count > 1 else ""))
+        return "".join(result)
 
-    return ''.join(rle_string)
-# --------------------------------------------------
-def main():
-    """Make a jazz noise here"""
-
-    args = get_args()
-    args = args.positional
-
-    if os.path.isfile(args):
-        with open(args) as file:
-            for line in file:
-                print(rle(line.strip()))
-    else:
-        print(rle(args))
 
 # --------------------------------------------------
 def main():
-    """Make a jazz noise here"""
+        """Make a jazz noise here"""
 
-    args = get_args()
-    for seq in args.sequence.splitlines():
-        print(rle(seq))
+        args = get_args()
+        args = args.positional
 
-# --------------------------------------------------
-def test_rle():
-    """ Test rle """
+        if os.path.isfile(args):
+            with open(args) as file:
+                for line in file:
+                    print(rle(line.strip()))
+        else:
+            print(rle(args))
 
-    assert rle('A') == 'A'
-    assert rle('ACGT') == 'ACGT'
-    assert rle('AA') == 'A2'
-    assert rle('AAAAA') == 'A5'
-    assert rle('ACCGGGTTTT') == 'AC2G3T4'
+
 # --------------------------------------------------
 if __name__ == "__main__":
-    main()
+        main()

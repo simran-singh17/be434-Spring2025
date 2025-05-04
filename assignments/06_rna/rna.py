@@ -6,37 +6,49 @@ Purpose: Transcribe DNA to RNA
 """
 
 import argparse
+import os
 import sys
-import os 
-
+import shutil
 
 # --------------------------------------------------
 def get_args():
-    """get command-line arguments"""
+    """Get command-line arguments"""
 
     parser = argparse.ArgumentParser(
-        description='Transcribe DNA to RNA',
+        description='Convert DNA to RNA',
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-    
-    parser.add_argument('file',
-                        metavar='FILE',
-                        nargs='+',
-                        type=argparse.FileType('rt'),
-                        help='Input DNA file(s)')                                
+
+    parser.add_argument('file', metavar='File', nargs='+', help='Input DNA file(s)')
+
+    parser.add_argument('-R',
+                        '--RNA',
+                        help='Replacement for T (default: U)',
+                        metavar='str',
+                        type=str,
+                        default='U')
 
     parser.add_argument('-o',
-                        '--outfile',
+                        '--out_dir',
+                        help='Output directory for RNA sequences',
                         metavar='DIR',
-                        default= [sys.stdout],
-                        help='Output directory')
+                        type=str,
+                        default='out')
 
-    return parser.parse_args()         
+    args = parser.parse_args()
+
+    for filename in args.file:
+        if not os.path.isfile(filename):
+            print(f"usage: {sys.argv[0]} <File>", file=sys.stderr)
+            print(f"No such file or directory: '{filename}'", file=sys.stderr)
+            sys.exit(1)
+
+    return args
 
 # --------------------------------------------------
 def main():
-    """Make a jazz noise here"""
-    args = get_args() 
+    """Convert DNA to RNA"""
 
+    args = get_args()
     if not os.path.isdir(args.out_dir):
         os.makedirs(args.out_dir)
 
@@ -60,6 +72,7 @@ def main():
     file_word = "file" if file_count == 1 else "files"
 
     print(f'Done, wrote {total_sequences} {sequence_word} in {file_count} {file_word} to directory "{args.out_dir}".')
+#pytest -xv test.py
 
 # --------------------------------------------------
 if __name__ == '__main__':

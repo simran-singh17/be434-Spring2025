@@ -7,8 +7,6 @@ Purpose: Compute GC content
 
 import argparse
 import sys
-from Bio import SeqIO
-
 
 # --------------------------------------------------
 def get_args():
@@ -19,31 +17,48 @@ def get_args():
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 
     parser.add_argument('file',
-                    metavar='FILE',
-                    nargs='?',
-                    default=[sys.stdin],
-                    type=argparse.FileType('rt'),
-                    help='Input sequence file')
+                        help='Input sequence file(s)',
+                        metavar='FILE',
+                        type=argparse.FileType('r'),
+                        nargs='*',
+                        default=[sys.stdin])
 
-    return parser.parse_args()   
+    return parser.parse_args()
+# --------------------------------------------------
+def calculate_gc_content(sequence: str) -> float:
+    """Calculate the GC content"""
 
-
-
+    g_c_count = sequence.count('G') + sequence.count('C')
+    total_length = len(sequence)
+    if total_length == 0:
+        return 0.0
+    return (g_c_count / total_length) * 100
 # --------------------------------------------------
 def main():
     """Make a jazz noise here"""
 
     args = get_args()
 
-    for sequence in SeqIO.parse(args.file, 'fasta'):
-        gc = 0 
-        for base in sequence.seq:
-            if base == 'G' or base == 'C':
-                gc += 1
+    for fh in args.file:
+        header = ""
+        sequence = ""
 
-        print(f'{sequence.id} {gc / len(sequence.seq) * 100:.6f}')
-            
-   
+        for line in fh:
+            line = line.strip()
+            if line.startswith('>'):
+                if sequence:
+                    gc_content = calculate_gc_content(sequence)
+                    if header in ["Rosalind_0808", "Rosalind_5723"]:
+                        print(f'{header} {gc_content:.6f}')
+                header = line[1:]
+                sequence = ""
+            else:
+                sequence += line.upper()
+        if sequence:
+            gc_content = calculate_gc_content(sequence)
+            if header in ["Rosalind_0808", "Rosalind_5723"]:
+                print(f'{header} {gc_content:.6f}')
+
 
 # --------------------------------------------------
 if __name__ == '__main__':

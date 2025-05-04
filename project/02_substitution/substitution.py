@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 """
-Author : Add your Name <Add your email>
-Date   : 2025-05-03
-Purpose: Caesar‐shift encode/decode a file
+Author : Simran Singh <singh17@arizona.edu>
+Date   : 2025-05-04
+Purpose: substitution cipher project
 """
 
 import argparse
+import random
 import sys
 
 
@@ -14,7 +15,7 @@ def get_args():
     """Get command-line arguments"""
 
     parser = argparse.ArgumentParser(
-        description="caesar shift",
+        description="substitution cipher",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
 
@@ -23,12 +24,7 @@ def get_args():
     )
 
     parser.add_argument(
-        "-n",
-        "--number",
-        metavar="NUMBER",
-        type=int,
-        default=3,
-        help="A number to shift",
+        "-s", "--seed", metavar="SEED", type=int, default=3, help="A random seed"
     )
 
     parser.add_argument(
@@ -49,27 +45,30 @@ def get_args():
 
 # --------------------------------------------------
 def main():
-    """Make a jazz noise here"""
+    """Perform the substitution cipher"""
 
     args = get_args()
     alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-    shift = args.number % 26
+
+    random.seed(args.seed)
+    cipher = "".join(random.sample(alpha, len(alpha)))
+
     if args.decode:
-        shift = -shift
+        mapping = {cipher[i]: alpha[i] for i in range(26)}
+    else:
+        mapping = {alpha[i]: cipher[i] for i in range(26)}
 
     out_f = args.outfile if args.outfile else sys.stdout
 
     for line in args.file:
-        result = []
+        out = []
         for ch in line:
             up = ch.upper()
-            if up in alpha:
-                idx = alpha.index(up)
-                new = alpha[(idx + shift) % 26]
-                result.append(new)
+            if up in mapping:
+                out.append(mapping[up])
             else:
-                result.append(ch)
-        out_f.write("".join(result))
+                out.append(ch)
+        out_f.write("".join(out))
 
     if args.outfile:
         args.outfile.close()
